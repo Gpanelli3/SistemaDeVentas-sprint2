@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <title>Document</title>
+
+  <header>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <div >
+                <a><img src="https://na.leafletscdns.com/com.ar/data/6/logo.png?0674196497436a8d06d82c0b388fafb6" alt="Logo" width="40" height="28" class="p"></a>
+            </div>
+                
+
+            <a class="navbar-brand" href="./home">SUPERMERCADO DIA</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                  <a class="nav-link active" aria-current="page" href="./index">Home</a>
+                  <a class="nav-link" href="./agregarProd">Ingresar Productos</a>
+                    <a class="nav-link" href="./update">Actualizar Productos</a>
+
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Buscar por categorias
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="categoria">Cervezas</a></li>
+                            <li><a class="dropdown-item" href="#">Fernet</a></li>
+                            <li><a class="dropdown-item" href="#">Vodkas</a></li>
+                            <li><a class="dropdown-item" href="#">Vinos</a></li>
+                            <li><a class="dropdown-item" href="#">otros</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div class="DEBAJO NAV RAMA">
+        </nav>
+    </header>
+</head>
+
+                            
+                              
+                               
+
+
+<body>
+    <h2 class="titulo-tabla">Todos los Productos</h2>
+    <div class="container mt-4">
+      <div class="row justify-content-md-center">
+        <h1 class="text-center mb-4">Listado de Productos</h1>
+      </div>
+
+      <div class="row justify-content-md-center">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">NOMBRE</th>
+                <th scope="col">DESCRIPCION</th>
+                <th scope="col">CATEGORIA</th>
+                <th scope="col">CANTIDAD</th>
+                <th scope="col">PRECIO</th>
+                <th scope="col">imagen</th>
+              </tr>
+            </thead>
+
+            <tbody>
+                {% for i in producto%}
+                <tr>
+                    {% for val in i %}
+                        <td>{{ val }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="row justify-content-md-center">
+        <div class="col-md-auto">
+          <span>
+            {{ pagination.info }}
+            <hr />
+          </span>
+          {{ pagination.links }}
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  </body>
+</html>
