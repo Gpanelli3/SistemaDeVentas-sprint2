@@ -80,6 +80,9 @@ def agregarProd():
     return render_template('agregarProd.html')
 
 
+def convertir_a_binario(foto):
+    with open(foto, 'rb') as f:
+        blob = f.read()
 
 #STRING ALEATORIO PARA LAS IMAGENES
 def stringAleatorio():
@@ -109,7 +112,10 @@ def ingresarProd():
         #capturando extensión del archivo ejemplo: (.png, .jpg, .pdf ...etc)
         extension           = os.path.splitext(filename)[1]
         nuevoNombreFile     = stringAleatorio() + extension
-     
+
+        #convirtiendola a binario para poder almacenarla en la base de datos
+        #imgbin=convertir_a_binario(nuevoNombreFile)
+        
         upload_path = os.path.join (basepath, 'static/archivos', nuevoNombreFile) 
         file.save(upload_path)
 
