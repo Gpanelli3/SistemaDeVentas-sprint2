@@ -46,7 +46,7 @@ def index():
 
     #consulta para traer los productos y plasmarlos en cada pagina
     productos=[]
-    sql=(f'SELECT producto.idProducto, producto.nombre, producto.descripcion, categorias.nombre, producto.cantidad, producto.precio FROM producto INNER JOIN categorias ON categorias.idcategorias = id_cat_corresp ORDER BY idProducto ASC LIMIT {per_page} OFFSET {start_index -1}')
+    sql=(f'SELECT producto.idProducto, producto.nombre, producto.descripcion, categorias.nombre, producto.cantidad, producto.precio, producto.imagen FROM producto INNER JOIN categorias ON categorias.idcategorias = id_cat_corresp ORDER BY idProducto DESC LIMIT {per_page} OFFSET {start_index -1}')
     cursor.execute(sql)
 
     for i in cursor:
@@ -80,9 +80,9 @@ def agregarProd():
     return render_template('agregarProd.html')
 
 
-def convertir_a_binario(foto):
-    with open(foto, 'rb') as f:
-        blob = f.read()
+#def convertir_a_binario(foto):
+    #with open(foto, 'rb') as f:
+        #blob = f.read()
 
 #STRING ALEATORIO PARA LAS IMAGENES
 def stringAleatorio():
@@ -111,10 +111,11 @@ def ingresarProd():
         
         #capturando extensión del archivo ejemplo: (.png, .jpg, .pdf ...etc)
         extension           = os.path.splitext(filename)[1]
+        #ESTA ES LA IMAGEN
         nuevoNombreFile     = stringAleatorio() + extension
 
         #convirtiendola a binario para poder almacenarla en la base de datos
-        #imgbin=convertir_a_binario(nuevoNombreFile)
+        #imgbin=convertir_a_binario(file)
         
         upload_path = os.path.join (basepath, 'static/archivos', nuevoNombreFile) 
         file.save(upload_path)
@@ -136,16 +137,35 @@ def ingresarProd():
 
 
 
-
-
-
 @app.route('/categoria')
 def categoria():
     cursor=mysql.connection.cursor()
+    if request.method == 'POST':
+        cat=request.form['categoria']
 
-    prodCat=[]
-    sql=('SELECT * FROM producto')
-    cursor.execute(sql)
+    if cat == 5:
+        prodCat=[]
+        sql=('SELECT * FROM producto where categoria = 5')
+        cursor.execute(sql)
+    if cat == 6:
+        prodCat=[]
+        sql=('SELECT * FROM producto where categoria = 6')
+        cursor.execute(sql)
+    if cat == 7:
+        prodCat=[]
+        sql=('SELECT * FROM producto where categoria = 7')
+        cursor.execute(sql)
+    if cat == 8:
+        prodCat=[]
+        sql=('SELECT * FROM producto where categoria = 8')
+        cursor.execute(sql)
+    if cat == 9:
+        prodCat=[]
+        sql=('SELECT * FROM producto where categoria = 9')
+        cursor.execute(sql)
+
+
+
     
     for i in cursor:
         prodCat.append(i)
