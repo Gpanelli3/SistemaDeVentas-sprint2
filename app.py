@@ -1,7 +1,11 @@
 from flask import Flask, render_template,request,redirect,url_for,flash
 from flask_mysqldb import MySQL
 from flask_paginate import Pagination, get_page_args
+from random import sample
 
+#Para subir archivo tipo foto al servidor
+from werkzeug.utils import secure_filename 
+import os
 
 app=Flask(__name__)
 
@@ -77,6 +81,15 @@ def agregarProd():
 
 
 
+#STRING ALEATORIO PARA LAS IMAGENES
+def stringAleatorio():
+    #Generando string aleatorio
+    string_aleatorio = "0123456789abcdefghijklmnopqrstuvwxyz_"
+    longitud         = 20
+    secuencia        = string_aleatorio.upper()
+    resultado_aleatorio  = sample(secuencia, longitud)
+    string_aleatorio     = "".join(resultado_aleatorio)
+    return string_aleatorio
 
 
 @app.route('/ingresarProd', methods=['POST'])
@@ -87,7 +100,20 @@ def ingresarProd():
         precio=request.form['precio']
         cantidad=request.form['cantidad']
         cat=request.form['categoria']
-        #img=request.form['imagen']
+
+        #proceso para las imagenes
+        file=request.files['imagen']
+        basepath = os.path.dirname (__file__) #La ruta donde se encuentra el archivo actual
+        filename = secure_filename(file.filename) #Nombre original del archivo
+        
+        #capturando extensión del archivo ejemplo: (.png, .jpg, .pdf ...etc)
+        extension           = os.path.splitext(filename)[1]
+        nuevoNombreFile     = stringAleatorio() + extension
+     
+        upload_path = os.path.join (basepath, 'static/archivos', nuevoNombreFile) 
+        file.save(upload_path)
+
+
 
         nombreMax=""
         nombreMax=name.upper()
