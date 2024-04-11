@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Libretas Digitales</title>
+    <link rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/4b7878dea0.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <header>
+        
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+
+            <div class="container-fluid">
+                <div class="btn-menu">
+                    <a><img src="foto1.jpg" alt="Logo" width="160" height="100" class="p"></a>
+                </div>
+                <a class="navbar-brand" style="font-size: 27px;">SUPERMERCADO DIA</a>
+
+            </div>
+        </nav>
+    </header>
+
+  <br>
+    <div class='container-fluid row'>
+        <h2 class="titulo-tabla">Productos selecionados:</h2>
+
+        <div class="container mt-5" style="background-color: brown;">
+            <table class="table">
+                <thead>
+                    <tr >
+                        <th scope="col">ID</th>
+                        <th scope="col">NOMBRE</th>
+                        <th scope="col">DESCRIPCION</th>
+                        <th scope="col">CATEGORIA</th>
+                        <th scope="col">CANTIDAD</th>
+                        <th scope="col">PRECIO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in resultados %}
+                        <tr>
+                            {% for val in i %}
+                                <td>{{ val }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <br>
+    <a href="/" class="category notloaded with_children collapsed" style="color: black; font-size: 20px; font-family: Arial;"> Volver al Inicio</a>
+
+    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js' integrity='sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm' crossorigin='anonymous'></script>
+</body>
+</html>

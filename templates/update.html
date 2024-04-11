@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>Actualizar Producto</title>
+</head>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <div >
+          <a><img src="https://na.leafletscdns.com/com.ar/data/6/logo.png?0674196497436a8d06d82c0b388fafb6" alt="Logo" width="40" height="28" class="p"></a>
+        </div>
+        <a class="navbar-brand" href="./home">SUPERMERCADO DIA</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-link active" aria-current="page" href="./">Home</a>
+            <a class="nav-link" href="./agregarProd">Ingresar Productos</a>
+            <a class="nav-link" href="./update">Actualizar Productos</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <div class="container">
+    <h2>Actualizar Producto</h2>
+    <form action="/update" method="post">
+        <div class="mb-3">
+            <label for="idProducto" class="form-label">ID del Producto:</label>
+            <input type="text" name="idProducto" id="idProducto" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="precio" class="form-label">Precio:</label>
+            <input type="number" name="precio" id="precio" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="cantidad" class="form-label">Cantidad:</label>
+            <input type="number" name="cantidad" id="cantidad" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Actualizar Producto</button>
+    </form>
+</body>
+</html>

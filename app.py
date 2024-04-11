@@ -66,10 +66,11 @@ def index():
                           display_msg=f"mostrando registros {start_index}- {end_index} de un total de {count}")
     
     mysql.connection.commit()
+    categorias=listabebidas()
     cursor.close()
 
-
-    return render_template("index.html", producto=productos, pagination=pagination)
+    return render_template("index.html", producto=productos, pagination=pagination,categorias=categorias)
+    
 
 
 
@@ -134,6 +135,70 @@ def ingresarProd():
         cursor.close()
         
     return redirect(url_for('index'))
+
+
+
+@app.route('/update', methods=['GET', 'POST'])
+def update():
+    if request.method == 'POST':
+        idProducto = request.form.get('idProducto')
+        #nuevoNombre = request.form.get('nombre')  
+        nuevoPrecio = request.form.get('precio')
+        nuevaCantidad = request.form.get('cantidad')
+
+        
+        try:
+            cursor = mysql.connection.cursor()
+            cursor.execute('UPDATE producto SET precio = %s, cantidad = %s WHERE idProducto = %s',
+                           (nuevoPrecio, nuevaCantidad, idProducto))
+            mysql.connection.commit()
+            cursor.close()
+            print("Actualización correcta")
+        except mysql.connector.Error as error:
+            print("Error MySQL:", error)
+
+    
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT producto.idProducto, producto.nombre, producto.descripcion, categorias.nombre, producto.cantidad, producto.precio FROM producto INNER JOIN categorias ON categorias.idcategorias = id_cat_corresp")
+    productos = cursor.fetchall()
+    cursor.close()
+
+    return render_template("update.html", title="Pagina Principal", user="PRODUCTOS INGRESADOS CORRECTAMENTE", productos=productos)
+
+
+
+def listabebidas():
+    data = {}
+
+    cursor = mysql.connection.cursor()
+    sql = "SELECT * FROM categorias"
+    cursor.execute(sql)
+    categorias = cursor.fetchall()
+    
+    return(categorias)
+
+
+@app.route("/categ", methods=['POST'])
+def seleccion():
+    if request.method == 'POST':
+
+        id= request.form['pc']
+        
+        cursor = mysql.connection.cursor()
+        sql= "SELECT * FROM producto WHERE id_cat_corresp = %s " 
+        cursor.execute(sql,(id,))
+        resultados = cursor.fetchall()
+
+        return render_template('seleccionado.html', resultados=resultados)
+
+
+
+
+
+
+
+
+
 
 
 
