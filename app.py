@@ -2,7 +2,7 @@ from flask import Flask, render_template,request,redirect,url_for,flash
 from flask_mysqldb import MySQL
 from flask_paginate import Pagination, get_page_args
 from random import sample
-from PIL import image
+#from PIL import image
 
 #Para subir archivo tipo foto al servidor
 from werkzeug.utils import secure_filename 
@@ -47,7 +47,7 @@ def index():
 
     #consulta para traer los productos y plasmarlos en cada pagina
     productos=[]
-    sql=(f'SELECT producto.idProducto, producto.nombre, producto.descripcion, categorias.nombre, producto.cantidad, producto.precio, producto.imagen FROM producto INNER JOIN categorias ON categorias.idcategorias = id_cat_corresp ORDER BY idProducto DESC LIMIT {per_page} OFFSET {start_index -1}')
+    sql=(f'SELECT producto.idProducto, producto.nombre, producto.descripcion, categorias.nombre, producto.cantidad, producto.precio FROM producto INNER JOIN categorias ON categorias.idcategorias = id_cat_corresp ORDER BY idProducto DESC LIMIT {per_page} OFFSET {start_index -1}')
     cursor.execute(sql)
 
     for i in cursor:
@@ -136,8 +136,8 @@ def ingresarProd():
                        (nombreMax,descr,precio,cantidad,cat))
         mysql.connection.commit()
 
-
         cursor.close()
+
         
     return redirect(url_for('index'))
 
@@ -197,20 +197,20 @@ def seleccion():
         return render_template('seleccionado.html', resultados=resultados)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 if __name__ == '__main__':
     app.run(port=8000, debug=True)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
