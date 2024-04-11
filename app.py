@@ -137,40 +137,7 @@ def ingresarProd():
 
 
 
-@app.route('/categoria')
-def categoria():
-    cursor=mysql.connection.cursor()
-    if request.method == 'POST':
-        cat=request.form['categoria']
 
-    if cat == 5:
-        prodCat=[]
-        sql=('SELECT * FROM producto where categoria = 5')
-        cursor.execute(sql)
-    if cat == 6:
-        prodCat=[]
-        sql=('SELECT * FROM producto where categoria = 6')
-        cursor.execute(sql)
-    if cat == 7:
-        prodCat=[]
-        sql=('SELECT * FROM producto where categoria = 7')
-        cursor.execute(sql)
-    if cat == 8:
-        prodCat=[]
-        sql=('SELECT * FROM producto where categoria = 8')
-        cursor.execute(sql)
-    if cat == 9:
-        prodCat=[]
-        sql=('SELECT * FROM producto where categoria = 9')
-        cursor.execute(sql)
-
-
-
-    
-    for i in cursor:
-        prodCat.append(i)
-
-    return render_template("categoria.html", categoria=prodCat)
 
 if __name__ == '__main__':
     app.run(port=8000, debug=True)
