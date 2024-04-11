@@ -2,6 +2,7 @@ from flask import Flask, render_template,request,redirect,url_for,flash
 from flask_mysqldb import MySQL
 from flask_paginate import Pagination, get_page_args
 from random import sample
+from PIL import image
 
 #Para subir archivo tipo foto al servidor
 from werkzeug.utils import secure_filename 
@@ -69,6 +70,10 @@ def index():
     categorias=listabebidas()
     cursor.close()
 
+    #usar PIL para mostrar la foto 
+        #imagen=image.open(filename)
+        #imagen.show()
+
     return render_template("index.html", producto=productos, pagination=pagination,categorias=categorias)
     
 
@@ -130,7 +135,7 @@ def ingresarProd():
         cursor.execute('INSERT INTO producto(nombre,descripcion,precio,cantidad,id_cat_corresp) VALUES(%s,%s,%s,%s,%s)',
                        (nombreMax,descr,precio,cantidad,cat))
         mysql.connection.commit()
-    
+
 
         cursor.close()
         
