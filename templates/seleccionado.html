@@ -27,6 +27,26 @@
                   <a class="nav-link" href="./agregarProd">Ingresar Productos</a>
                     <a class="nav-link" href="./update">Actualizar Productos</a>
             </div class="DEBAJO NAV RAMA">
+            <div class="container mt-4">
+                <div class="categorias-wrapper">
+                    <div class="categorias-lista">
+                        <form method='POST' action="/categ">
+                            <div class="col-2" style="font-family: Arial, Helvetica, sans-serif;">
+                                <select class="form-select" name="pc" id="pc" style="margin-left: 10%; border-color: black; border-radius: 20px; " required>
+                                    <option value="" selected disabled style="background-color: rgb(157, 217, 245);" >Categorias</option>
+                                    {% for x in categorias %}
+                                    <option value="{{x[0]}}">{{x[1] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        
+                            </div>
+                    
+                                <button type="submit" class="btn btn-primary" style="margin-left: 20%; margin-top: -65px; font-size: 13px;" >Seleccionar</button>
+                    
+                            </div>
+                        </form>
+                      </div>
     </header>
 
   <br>
@@ -40,9 +60,9 @@
                         <th scope="col">ID</th>
                         <th scope="col">NOMBRE</th>
                         <th scope="col">DESCRIPCION</th>
-                        <th scope="col">PRECIO</th>
-                        <th scope="col">CANTIDAD</th>
                         <th scope="col">CATEGORIA</th>
+                        <th scope="col">CANTIDAD</th>
+                        <th scope="col">PRECIO</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -56,17 +76,6 @@
                 </tbody>
             </table>
         </div>
-    </div>
-    
-    <div class="row justify-content-md-center">
-        <div class="col-md-auto">
-          <span>
-            {{ pagination.info }}
-            <hr />
-          </span>
-          {{ pagination.links }}
-        </div>
-      </div>
     </div>
 
 

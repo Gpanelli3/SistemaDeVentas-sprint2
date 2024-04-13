@@ -86,9 +86,6 @@ def agregarProd():
     return render_template('agregarProd.html')
 
 
-#def convertir_a_binario(foto):
-    #with open(foto, 'rb') as f:
-        #blob = f.read()
 
 #STRING ALEATORIO PARA LAS IMAGENES
 def stringAleatorio():
@@ -146,8 +143,7 @@ def ingresarProd():
 @app.route('/update', methods=['GET', 'POST'])
 def update():
     if request.method == 'POST':
-        idProducto = request.form.get('idProducto')
-        #nuevoNombre = request.form.get('nombre')  
+        idProducto = request.form.get('idProducto') 
         nuevoPrecio = request.form.get('precio')
         nuevaCantidad = request.form.get('cantidad')
 
@@ -188,42 +184,14 @@ def seleccion():
     
     cursor = mysql.connection.cursor()
     
-    #traigo la cantidad de filas que hay en la tabla. Seria la cantidad de registros
-    cursor.execute('SELECT COUNT(*) AS total FROM producto')
-    row = cursor.fetchone()
-    if row:
-        count = row[0]  # Acceder al primer elemento de la tupla
-        print("Total:", count)
-    else:
-        print("No se encontraron filas.")
-
-    #utilizo una funcion de pagination, el valor "page", le digo que arranca en la pagina 1 y indico cuantos items quiero por pagina
-    page_num=request.args.get('page',1,type=int)
-    per_page=5
-
-    #page_num: Este es el número de página que estás viendo actualmente. Por ejemplo, si estás en la primera página, page_num sería 1; si estás en la segunda página, sería 2, y así sucesivamente.
-    #per_page: Este valor representa cuántos elementos deseas mostrar en cada página, es decir, el tamaño de tu página.
-    #start_index: Este es el índice del primer elemento que se mostrará en la página actual.
-    
-    start_index=(page_num-1) * per_page +1 
-    print(start_index)
-
-
+   
     id= request.form['pc']
-    sql= "SELECT * FROM producto WHERE id_cat_corresp = %s " 
+    sql= "SELECT producto.idProducto, producto.nombre, producto.descripcion, categorias.nombre, producto.cantidad, producto.precio FROM producto INNER JOIN categorias ON categorias.idcategorias = id_cat_corresp WHERE id_cat_corresp = %s " 
     cursor.execute(sql,(id,))
     resultados = cursor.fetchall()
+    categorias=listabebidas()
 
-    end_index= min(start_index + per_page, count)
-    if end_index >count:
-        end_index = count
-
-    #paginacion es una funcion de Pagination de Flask donde se juntan todos los datos y se establece los links
-    pagination=Pagination(page=page_num, total=count, per_page=per_page,
-                          display_msg=f"mostrando registros {start_index}- {end_index} de un total de {count}")
-    
-
-    return render_template('seleccionado.html', resultados=resultados, pagination=pagination)
+    return render_template('seleccionado.html', resultados=resultados, categorias=categorias)
 
 
 if __name__ == '__main__':
