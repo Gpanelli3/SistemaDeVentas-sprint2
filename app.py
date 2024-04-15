@@ -19,9 +19,25 @@ mysql=MySQL(app)
 
 app.secret_key = 'mysectrectkey'
 
-
 @app.route('/')
 def index():
+    nom=request.form['nombre']
+    contra=request.form['contra']
+
+    cursor=mysql.connection.cursor()
+    cursor.execute("insert into usuario(usuario,contra) VALUES (%s,%s)",
+                   (nom,contra))
+    
+    cursor.commit()
+    cursor.close()
+    return render_template("index.html")
+
+
+
+ 
+
+@app.route('/inicio')
+def inicio():
     #conexion a la base de datos
     cursor = mysql.connection.cursor()
     
@@ -74,7 +90,9 @@ def index():
         #imagen=image.open(filename)
         #imagen.show()
 
-    return render_template("index.html", producto=productos, pagination=pagination,categorias=categorias)
+    
+
+    return render_template("inicio.html", producto=productos, pagination=pagination,categorias=categorias)
     
 
 
