@@ -19,18 +19,19 @@ mysql=MySQL(app)
 
 app.secret_key = 'mysectrectkey'
 
-@app.route('/')
+@app.route('/', methods=['POST']) 
 def index():
-    nom=request.form['nombre']
-    contra=request.form['contra']
+    if request.method == 'POST':
+        nom=request.form['nombre']
+        contra=request.form['contra']
 
-    cursor=mysql.connection.cursor()
-    cursor.execute("insert into usuario(usuario,contra) VALUES (%s,%s)",
+        cursor=mysql.connection.cursor()
+        cursor.execute("insert into usuario(usuario,contra) VALUES (%s,%s)",
                    (nom,contra))
     
-    cursor.commit()
-    cursor.close()
-    return render_template("index.html")
+        mysql.connection.commit()
+        cursor.close()
+        return render_template("index.html")
 
 
 
