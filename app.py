@@ -19,19 +19,7 @@ mysql=MySQL(app)
 
 app.secret_key = 'mysectrectkey'
 
-@app.route('/', methods=['POST']) 
-def index():
-    if request.method == 'POST':
-        nom=request.form['nombre']
-        contra=request.form['contra']
 
-        cursor=mysql.connection.cursor()
-        cursor.execute("insert into usuario(usuario,contra) VALUES (%s,%s)",
-                   (nom,contra))
-    
-        mysql.connection.commit()
-        cursor.close()
-        return render_template("index.html")
 
 
 
@@ -211,6 +199,32 @@ def seleccion():
     categorias=listabebidas()
 
     return render_template('seleccionado.html', resultados=resultados, categorias=categorias)
+
+
+
+
+
+@app.route('/usuario') 
+def usuario():
+    cursor=mysql.connection.cursor()
+    cursor.execute("SELECT * from usuario")
+    usuarios=[]
+    for i in cursor:
+        usuarios.append(i)
+    
+    nom='gpanelli3'
+    con='123456'
+        
+    for x in usuarios:
+        if x[1] == nom and x[2] == con:
+            usu=x[1]
+            print("puede ingresar", usu)
+            return redirect("/inicio")
+        else:
+            print("usuario incorrecto")
+            return render_template("index.html")
+
+
 
 
 if __name__ == '__main__':
