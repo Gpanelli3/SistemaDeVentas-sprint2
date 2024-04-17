@@ -204,28 +204,46 @@ def seleccion():
 
 
 
-@app.route('/usuario') 
+@app.route('/index') 
 def usuario():
     cursor=mysql.connection.cursor()
+
+    # traemos los input del formulario para entrar en la pagina
+    #faltaria el boton para redireccionar a la pagina de crear usuarios
+    #tengo que usar los input, sino me lleva directamente a inicio
+    
     cursor.execute("SELECT * from usuario")
     usuarios=[]
     for i in cursor:
         usuarios.append(i)
-    
-    nom='gpanelli3'
-    con='123456'
-        
+    print(usuarios)
+    nom='maurito123'
+    contra='123456'
     for x in usuarios:
-        if x[1] == nom and x[2] == con:
+        if x[1] == nom and x[2] == contra:
             usu=x[1]
             print("puede ingresar", usu)
             return redirect("/inicio")
         else:
             print("usuario incorrecto")
             return render_template("index.html")
+    cursor.close()
+    #return render_template("index.html")
 
 
 
+
+@app.route('/ingresoUsu')
+def ingresoUsu():   
+    cursor=mysql.connection.cursor()
+
+    nom = request.form.get('nombre') 
+    contra = request.form.get('contra')
+
+
+    cursor.execute('INSERT INTO usuario(usuario,contra) VALUES(%s,%s)',
+                   (nom,contra))
+    mysql.connection.commit()
 
 if __name__ == '__main__':
     app.run(port=8000, debug=True)
