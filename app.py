@@ -21,13 +21,13 @@ app.secret_key = 'mysectrectkey'
 
 
 
-@app.route('/')
-def home():
-    return render_template('login.html')
+#@app.route('/')
+#def home():
+    #return render_template('inicio.html')
 
  
 
-@app.route('/inicio')
+@app.route('/')
 def inicio():
     #conexion a la base de datos
     cursor = mysql.connection.cursor()
@@ -199,14 +199,16 @@ def seleccion():
     return render_template('seleccionado.html', resultados=resultados, categorias=categorias)
 
 
+@app.route('/bienvenida')
+def bienvenida():
+    return render_template('bienvenida.html')
 
 
 
 
 
-
-@app.route('/login', methods=['GET', 'POST']) 
-def login():
+@app.route('/ingreso', methods=['GET', 'POST']) 
+def ingreso():
 
     if request.method == 'POST' and 'nombre' in request.form and 'contra' in request.form:
         usuario = request.form.get('nombre') 
@@ -217,7 +219,7 @@ def login():
         cursor.execute("SELECT * from usuario where usuario = %s AND contra = %s", (usuario,contra))
         cursor.close()
 
-        return render_template("bienvenida.html")
+        return render_template("/")
 
     
 
@@ -246,17 +248,6 @@ if __name__ == '__main__':
     app.run(port=8000, debug=True)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#PARA DOCKER
+#if __name__ == '__main__':
+    #app.run(host='0.0.0.0', port=5000, debug=True)

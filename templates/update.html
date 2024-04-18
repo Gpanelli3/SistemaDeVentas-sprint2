@@ -7,6 +7,7 @@
   <title>Actualizar Producto</title>
 </head>
 <body>
+  
   <header>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
@@ -27,24 +28,34 @@
       </div>
     </nav>
   </header>
+  <main>
   <div class="container">
     <h2>Actualizar Producto</h2>
     <form action="/update" method="post">
-        <div class="mb-3">
+        <div class="m-3">
             <label for="idProducto" class="form-label">ID del Producto:</label>
-            <input type="text" name="idProducto" id="idProducto" class="form-control" required>
+            <input type="text" name="idProducto" id="idProducto" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
         </div>
         <div class="mb-3">
             <label for="precio" class="form-label">Precio:</label>
-            <input type="number" name="precio" id="precio" class="form-control" required>
+            <input type="number" name="precio" id="precio" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"required>
         </div>
         <div class="mb-3">
             <label for="cantidad" class="form-label">Cantidad:</label>
-            <input type="number" name="cantidad" id="cantidad" class="form-control" required>
+            <input type="number" name="cantidad" id="cantidad" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
         </div>
         <button type="submit" class="btn btn-primary">Actualizar Producto</button>
     </form>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    </main>
 
-</body>
+    <div class="card">
+      <div class="card-body text-center" >
+        <h5 class="card-title">SUPERMERCADOS COTO</h5>
+        <p class="card-text">Realizado por IES software developers</p>
+      </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  </body>
+
 </html>
