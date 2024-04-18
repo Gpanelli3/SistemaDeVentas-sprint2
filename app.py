@@ -70,6 +70,7 @@ def inicio():
         end_index = count
 
     #paginacion es una funcion de Pagination de Flask donde se juntan todos los datos y se establece los links
+    
     pagination=Pagination(page=page_num, total=count, per_page=per_page,
                           display_msg=f"mostrando registros {start_index}- {end_index} de un total de {count}")
     
@@ -216,7 +217,7 @@ def login():
         cursor.execute("SELECT * from usuario where usuario = %s AND contra = %s", (usuario,contra))
         cursor.close()
 
-        return render_template("inicio.html")
+        return render_template("bienvenida.html")
 
     
 
