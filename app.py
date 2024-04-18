@@ -204,7 +204,9 @@ def bienvenida():
     return render_template('bienvenida.html')
 
 
-
+@app.route('/login')
+def login():
+    return render_template('login.html')
 
 
 @app.route('/ingreso', methods=['GET', 'POST']) 
@@ -219,7 +221,7 @@ def ingreso():
         cursor.execute("SELECT * from usuario where usuario = %s AND contra = %s", (usuario,contra))
         cursor.close()
 
-        return render_template("/")
+        return render_template("/bienvenida.html")
 
     
 
