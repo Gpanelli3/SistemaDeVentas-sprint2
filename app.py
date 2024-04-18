@@ -21,7 +21,9 @@ app.secret_key = 'mysectrectkey'
 
 
 
-
+@app.route('/')
+def home():
+    return render_template('login.html')
 
  
 
@@ -75,11 +77,6 @@ def inicio():
     categorias=listabebidas()
     cursor.close()
 
-    #usar PIL para mostrar la foto 
-        #imagen=image.open(filename)
-        #imagen.show()
-
-    
 
     return render_template("inicio.html", producto=productos, pagination=pagination,categorias=categorias)
     
@@ -143,7 +140,7 @@ def ingresarProd():
         cursor.close()
 
         
-    return redirect(url_for('index'))
+    return redirect(url_for('inicio'))
 
 
 
@@ -204,46 +201,45 @@ def seleccion():
 
 
 
-@app.route('/index') 
-def usuario():
-    cursor=mysql.connection.cursor()
 
-    # traemos los input del formulario para entrar en la pagina
-    #faltaria el boton para redireccionar a la pagina de crear usuarios
-    #tengo que usar los input, sino me lleva directamente a inicio
+
+
+@app.route('/login', methods=['GET', 'POST']) 
+def login():
+
+    if request.method == 'POST' and 'nombre' in request.form and 'contra' in request.form:
+        usuario = request.form.get('nombre') 
+        contra = request.form.get('contra')
+
+        cursor=mysql.connection.cursor()
+
+        cursor.execute("SELECT * from usuario where usuario = %s AND contra = %s", (usuario,contra))
+        cursor.close()
+
+        return render_template("inicio.html")
+
     
-    cursor.execute("SELECT * from usuario")
-    usuarios=[]
-    for i in cursor:
-        usuarios.append(i)
-    print(usuarios)
-    nom='maurito123'
-    contra='123456'
-    for x in usuarios:
-        if x[1] == nom and x[2] == contra:
-            usu=x[1]
-            print("puede ingresar", usu)
-            return redirect("/inicio")
-        else:
-            print("usuario incorrecto")
-            return render_template("index.html")
-    cursor.close()
-    #return render_template("index.html")
+
+    
 
 
 
+@app.route("/registro")
+def registro():
+    return render_template("registro.html")
 
-@app.route('/ingresoUsu')
-def ingresoUsu():   
-    cursor=mysql.connection.cursor()
+@app.route('/crearRegistro', methods=['GET', 'POST'])
+def crearRegistro():   
 
     nom = request.form.get('nombre') 
     contra = request.form.get('contra')
 
-
-    cursor.execute('INSERT INTO usuario(usuario,contra) VALUES(%s,%s)',
-                   (nom,contra))
+    cursor=mysql.connection.cursor()
+    cursor.execute('INSERT INTO usuario(usuario,contra) VALUES(%s,%s)',(nom,contra))
     mysql.connection.commit()
+
+    return render_template("login.html")
+
 
 if __name__ == '__main__':
     app.run(port=8000, debug=True)
