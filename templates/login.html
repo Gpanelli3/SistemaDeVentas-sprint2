@@ -60,6 +60,13 @@
                 </head>
 
 <body>
+  <div class="form-control" action="acceso-login" method="post">
+    {%if mensaje %}
+      {{mensaje}}
+    {%endif%}
+
+  </div>
+
     <h1>LOGIN DE USUARIO</h1>
 
     <form action="/ingreso" method="post" enctype='multipart/form-data'>
