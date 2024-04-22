@@ -1,12 +1,17 @@
 from flask import Flask, render_template,request,redirect,url_for,flash, Response, session
-from flask_mysqldb import MySQL
+from flask_mysqldb import MySQL,MySQLdb
 from flask_paginate import Pagination, get_page_args
 from random import sample
 from flask_mail import Mail, Message
+from werkzeug.security import generate_password_hash
+#from flask_bcrypt import Bcrypt
+
+
 
 
 
 app=Flask(__name__)
+#bcrypt=Bcrypt(app)
 
 app.config['MYSQL_HOST']='localhost'
 app.config['MYSQL_USER']='genaro'
@@ -15,7 +20,7 @@ app.config['MYSQL_DB']='sistema-ventas'
 
 mysql=MySQL(app)
 
-app.secret_key = 'mysectrectkey'
+#app.secret_key = 'mysectrectkey'
 
 
 
@@ -183,26 +188,30 @@ def ingreso():
 
 
     if request.method == 'POST' and 'nombre' in request.form and 'contra' in request.form:
-        usuario = request.form.get('nombre') 
-        contra = request.form.get('contra')
-
+        _usuario = request.form.get('nombre') 
+        _contra = request.form.get('contra')
 
 
         cursor=mysql.connection.cursor()
-        
+        cursor.execute("SELECT * from usuario where usuario = %s AND contra = %s", (_usuario,_contra))
 
-        cursor.execute("SELECT * from usuario where usuario = %s AND contra = %s", (usuario,contra))
         account=cursor.fetchone()
-        #funciona mal 
+
         if account:
-            #session['logueado'] = True
-            #session['idusuario']= account['idusuario']
+            session['logueado'] = True
+            session['idusuario'] = account['idusuario']
+            session['admin']=account['admin']
+        
+        if session['admin']==1:
             return render_template('bienvenida.html')
 
-        else:
-            return render_template('login.html', mensaje="USUARIO INCORRECTO")
+        elif session['admin']==2:
+            return render_template('user.html')
+    else:
+        return render_template('login.html', mensaje="USUARIO INCORRECTO")
+            
+
         
-    cursor.close()
 
 
     
@@ -215,17 +224,20 @@ def ingreso():
 def registro():
     return render_template("registro.html")
 
+
+
 @app.route('/crearRegistro', methods=['GET', 'POST'])
 def crearRegistro():   
 
     nom = request.form.get('nombre') 
     contra = request.form.get('contra')
+    #hash_password=bcrypt.generate_password_hash(contra).decode('utf8')
 
     cursor=mysql.connection.cursor()
-    cursor.execute('INSERT INTO usuario(usuario,contra) VALUES(%s,%s)',(nom,contra))
+    cursor.execute('INSERT INTO usuario(usuario,contra) VALUES(%s,%s)',(nom,contra,2))
     mysql.connection.commit()
 
-    return render_template("login.html")
+    return render_template("registro.html", mensaje="Usuario registrado correctamente")
 
 
 
@@ -285,6 +297,7 @@ def user(request):
 
 
 if __name__ == '__main__':
+    app.secret_key="secret_key"
     app.run(port=8000, debug=True)
 
 

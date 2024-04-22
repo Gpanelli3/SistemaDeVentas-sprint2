@@ -60,23 +60,26 @@
                 </head>
 
 <body>
+    
+  
 
     <h1>REGISTRO DE USUARIO</h1>
 
     <form action="/crearRegistro" method="post" enctype='multipart/form-data'>
 
     <div class="input-group input-group-sm mb-3">
-        <span class="input-group-text" id="inputGroup-sizing-sm">nombre</span>
-        <input type="email" name="nombre" id="nombre" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" >
+        <span class="input-group-text" id="inputGroup-sizing-sm">E-mail</span>
+        <input type="email" name="nombre" id="nombre" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
       </div>
 
 
     <div class="input-group input-group-sm mb-3">
-        <span class="input-group-text" id="inputGroup-sizing-sm">CONTRASENA</span>
-        <input type="password" name="contra" id="contra" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" >
+        <span class="input-group-text" id="inputGroup-sizing-sm">Contrasena</span>
+        <input type="password" name="contra" id="contra" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
       </div>
 
       <button type="submit">CREAR NUEVO USUARIO</button>
+      <button><a href="/login">INGRESAR</a></button>
 
 </form>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
