@@ -20,7 +20,7 @@ app.config['MYSQL_DB']='sistema-ventas'
 
 mysql=MySQL(app)
 
-#app.secret_key = 'mysectrectkey'
+app.secret_key="secret_key"
 
 
 
@@ -188,24 +188,24 @@ def ingreso():
 
 
     if request.method == 'POST' and 'nombre' in request.form and 'contra' in request.form:
-        _usuario = request.form.get('nombre') 
-        _contra = request.form.get('contra')
+        usuario = request.form.get('nombre') 
+        contra = request.form.get('contra')
 
 
         cursor=mysql.connection.cursor()
-        cursor.execute("SELECT * from usuario where usuario = %s AND contra = %s", (_usuario,_contra))
+        cursor.execute("SELECT * from usuario where usuario = %s AND contra = %s", (usuario,contra))
 
         account=cursor.fetchone()
 
         if account:
             session['logueado'] = True
-            session['idusuario'] = account['idusuario']
-            session['admin']=account['admin']
+            session['usuario'] = usuario
+            session['id_rol']=2
         
-        if session['admin']==1:
+        if session['id_rol']==1:
             return render_template('bienvenida.html')
 
-        elif session['admin']==2:
+        elif session['id_rol']==2:
             return render_template('user.html')
     else:
         return render_template('login.html', mensaje="USUARIO INCORRECTO")
@@ -213,7 +213,10 @@ def ingreso():
 
         
 
-
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
     
 
     
@@ -274,7 +277,7 @@ def user(request):
 
     for i in cursor:
         productos.append(i)
-
+    print(productos)
     #end_index se calcula como el valor mínimo entre start_index + per_page y count.
     #start_index típicamente representa el índice del primer elemento en una página.
     #per_page indica el número de elementos mostrados por página.
@@ -286,18 +289,17 @@ def user(request):
 
     #paginacion es una funcion de Pagination de Flask donde se juntan todos los datos y se establece los links
     
-    pagination=Pagination(page=page_num, total=count, per_page=per_page,
+    Pagination=Pagination(page=page_num, total=count, per_page=per_page,
                           display_msg=f"mostrando registros {start_index}- {end_index} de un total de {count}")
     
     mysql.connection.commit()
     categorias=listabebidas()
     cursor.close()
-
+    return render_template("user.html", producto=productos, pagination=Pagination,categorias=categorias)
 
 
 
 if __name__ == '__main__':
-    app.secret_key="secret_key"
     app.run(port=8000, debug=True)
 
 
