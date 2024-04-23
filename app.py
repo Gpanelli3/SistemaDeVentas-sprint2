@@ -190,29 +190,35 @@ def ingreso():
     if request.method == 'POST' and 'nombre' in request.form and 'contra' in request.form:
         usuario = request.form.get('nombre') 
         contra = request.form.get('contra')
-        #rol = request.form.get('rol')
+
+
 
 
         cursor=mysql.connection.cursor()
 
 
         cursor.execute("SELECT * from usuario where usuario = %s AND contra = %s", (usuario,contra))
-
-        
         account=cursor.fetchone()
 
         if account:
             session['logueado'] = True
             session['usuario'] = usuario
-        print(account)
 
-        if account[3]==1:
-            return redirect(url_for('homeAdmin'))
 
-        elif account[3]==2:
-            return redirect(url_for('usuario'))
+            if account[3]==1:
+                return redirect(url_for('homeAdmin'))
+
+            elif account[3]==2:
+                return redirect(url_for('usuario'))
+        
         else:
-            return render_template('login.html', mensaje="USUARIO INCORRECTO")
+            return render_template('login.html', mensaje="USUARIO O CONTRASEÑA INCORRECTA")
+
+        
+        
+
+
+
 
 
 @app.route('/homeAdmin')
@@ -329,6 +335,9 @@ def crearRegistro():
     cursor=mysql.connection.cursor()
     cursor.execute('INSERT INTO usuario(usuario,contra,id_rol) VALUES(%s,%s,%s)',(nom,contra,2))
     mysql.connection.commit()
+    
+    cuenta=cursor.fetchone()
+    print(cuenta)
 
     return render_template("registro.html", mensaje="Usuario registrado correctamente")
 
