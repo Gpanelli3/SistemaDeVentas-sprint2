@@ -192,10 +192,7 @@ def ingreso():
         contra = request.form.get('contra')
 
 
-
-
         cursor=mysql.connection.cursor()
-
 
         cursor.execute("SELECT * from usuario where usuario = %s AND contra = %s", (usuario,contra))
         account=cursor.fetchone()
@@ -213,6 +210,9 @@ def ingreso():
         
         else:
             return render_template('login.html', mensaje="USUARIO O CONTRASEÑA INCORRECTA")
+
+
+
 
         
         
@@ -335,7 +335,7 @@ def crearRegistro():
     cursor=mysql.connection.cursor()
     cursor.execute('INSERT INTO usuario(usuario,contra,id_rol) VALUES(%s,%s,%s)',(nom,contra,2))
     mysql.connection.commit()
-    
+
     cuenta=cursor.fetchone()
     print(cuenta)
 
