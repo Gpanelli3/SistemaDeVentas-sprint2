@@ -190,22 +190,26 @@ def ingreso():
     if request.method == 'POST' and 'nombre' in request.form and 'contra' in request.form:
         usuario = request.form.get('nombre') 
         contra = request.form.get('contra')
+        #rol = request.form.get('rol')
 
 
         cursor=mysql.connection.cursor()
+
+
         cursor.execute("SELECT * from usuario where usuario = %s AND contra = %s", (usuario,contra))
 
+        
         account=cursor.fetchone()
 
         if account:
             session['logueado'] = True
             session['usuario'] = usuario
-            session['id_rol']=0
-        
-        if session['id_rol']==1:
+        print(account)
+
+        if account[3]==1:
             return redirect(url_for('homeAdmin'))
 
-        elif session['id_rol']==2:
+        elif account[3]==2:
             return redirect(url_for('usuario'))
         else:
             return render_template('login.html', mensaje="USUARIO INCORRECTO")
@@ -253,6 +257,8 @@ def homeAdmin():
                           display_msg=f"mostrando registros {start_index}- {end_index} de un total de {count}")
     
     categorias=listabebidas()
+
+
 
     return render_template('homeAdmin.html', producto=productos, pagination=pagination,categorias=categorias, mensaje='administrador')
 
@@ -321,7 +327,7 @@ def crearRegistro():
     #hash_password=bcrypt.generate_password_hash(contra).decode('utf8')
 
     cursor=mysql.connection.cursor()
-    cursor.execute('INSERT INTO usuario(usuario,contra) VALUES(%s,%s)',(nom,contra,2))
+    cursor.execute('INSERT INTO usuario(usuario,contra,id_rol) VALUES(%s,%s,%s)',(nom,contra,2))
     mysql.connection.commit()
 
     return render_template("registro.html", mensaje="Usuario registrado correctamente")

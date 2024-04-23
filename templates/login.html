@@ -34,7 +34,7 @@
             </div class="DEBAJO NAV RAMA">
 
 
-            
+            {{user}}
             <div class="container mt-4">
               <div class="categorias-wrapper">
                   <div class="categorias-lista">
@@ -72,7 +72,7 @@
     <form action="/ingreso" method="post" enctype='multipart/form-data'>
 
     <div class="input-group input-group-sm mb-3">
-        <span class="input-group-text" id="inputGroup-sizing-sm">nombre</span>
+        <span class="input-group-text" id="inputGroup-sizing-sm">USUARIO</span>
         <input type="email" name="nombre" id="nombre" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
       </div>
 
@@ -81,6 +81,8 @@
         <span class="input-group-text" id="inputGroup-sizing-sm">CONTRASENA</span>
         <input type="password" name="contra" id="contra" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
       </div>
+      
+      
 
 
     <button type="submit">INGRESAR</button>
