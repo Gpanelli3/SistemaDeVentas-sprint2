@@ -4,31 +4,32 @@ from flask_paginate import Pagination, get_page_args
 from random import sample
 from flask_mail import Mail, Message
 from werkzeug.security import generate_password_hash
-
-
-
-
-
-
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 app=Flask(__name__)
-#bcrypt=Bcrypt(app)
 
+
+#CONFIGURACION DE LA BASE DE DATOS
 app.config['MYSQL_HOST']='localhost'
 app.config['MYSQL_USER']='genaro'
 app.config['MYSQL_PASSWORD']='password'
 app.config['MYSQL_DB']='sistema-ventas'
-
 mysql=MySQL(app)
+#-----------------------------------------------------
+
+
+#CONFIGURACION DE FLASK MAIL
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'gpanelli3@gmail.com'
+app.config['MAIL_PASSWORD'] = 'Deporlomejor99'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail= Mail(app)
 
 app.secret_key="secret_key"
+s = URLSafeTimedSerializer('Thisisasecret!')
 
-
-
-#@app.route('/')
-#def home():
-    #return render_template('inicio.html')
-
- 
+#-----------------------------------------------------
 
 @app.route('/')
 def inicio():
@@ -328,20 +329,36 @@ def registro():
 @app.route('/crearRegistro', methods=['GET', 'POST'])
 def crearRegistro():   
 
-    nom = request.form.get('nombre') 
+    email = request.form.get('email') 
     contra = request.form.get('contra')
     #hash_password=bcrypt.generate_password_hash(contra).decode('utf8')
 
     cursor=mysql.connection.cursor()
-    cursor.execute('INSERT INTO usuario(usuario,contra,id_rol) VALUES(%s,%s,%s)',(nom,contra,2))
+    cursor.execute('INSERT INTO usuario(usuario,contra,id_rol) VALUES(%s,%s,%s)',(email,contra,2))
     mysql.connection.commit()
 
     cuenta=cursor.fetchone()
     print(cuenta)
 
+    #MAIL--------------------------------------------------------------------------
+    token= s.dumps(email, salt='email-confirm')
+
+    msg=Message ('confirm EMAIL', sender='asaas@gmail.com', recipients=[email])
+    link= url_for('confirm_email', token, _external=True)
+    msg.body='tu link es {}'.format(link)
+    mail.send(msg)
+
     return render_template("registro.html", mensaje="Usuario registrado correctamente")
 
 
+#MAIL---------------------------------------------------------------------
+app.route('/confirm_email/<token>')
+def confirm_email(token):
+    try:
+        email = s.loads(token, salt='email-confirm', max_age=3600)
+    except SignatureExpired:
+        return '<h1>The token is expired!</h1>'
+    return '<h1>The token works!</h1>'
 
 
 @app.route('/logout')
