@@ -18,16 +18,16 @@ mysql=MySQL(app)
 
 
 #CONFIGURACION DE FLASK MAIL
-app.config['MAIL_SERVER']='smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'gpanelli3@gmail.com'
-app.config['MAIL_PASSWORD'] = 'Deporlomejor99'
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-mail= Mail(app)
+#app.config['MAIL_SERVER']='smtp.gmail.com'
+#app.config['MAIL_PORT'] = 465
+#app.config['MAIL_USERNAME'] = 'gpanelli3@gmail.com'
+#app.config['MAIL_PASSWORD'] = 'Deporlomejor99'
+#app.config['MAIL_USE_TLS'] = False
+#app.config['MAIL_USE_SSL'] = True
+#mail= Mail(app)
 
 app.secret_key="secret_key"
-s = URLSafeTimedSerializer('Thisisasecret!')
+#s = URLSafeTimedSerializer('Thisisasecret!')
 
 #-----------------------------------------------------
 
@@ -341,24 +341,24 @@ def crearRegistro():
     print(cuenta)
 
     #MAIL--------------------------------------------------------------------------
-    token= s.dumps(email, salt='email-confirm')
+#    token= s.dumps(email, salt='email-confirm')
 
-    msg=Message ('confirm EMAIL', sender='asaas@gmail.com', recipients=[email])
-    link= url_for('confirm_email', token, _external=True)
-    msg.body='tu link es {}'.format(link)
-    mail.send(msg)
+#    msg=Message ('confirm EMAIL', sender='asaas@gmail.com', recipients=[email])
+#    link= url_for('confirm_email', token, _external=True)
+#    msg.body='tu link es {}'.format(link)
+#    mail.send(msg)
 
     return render_template("registro.html", mensaje="Usuario registrado correctamente")
 
 
 #MAIL---------------------------------------------------------------------
-app.route('/confirm_email/<token>')
-def confirm_email(token):
-    try:
-        email = s.loads(token, salt='email-confirm', max_age=3600)
-    except SignatureExpired:
-        return '<h1>The token is expired!</h1>'
-    return '<h1>The token works!</h1>'
+#app.route('/confirm_email/<token>')
+#def confirm_email(token):
+#    try:
+#        email = s.loads(token, salt='email-confirm', max_age=3600)
+#    except SignatureExpired:
+#        return '<h1>The token is expired!</h1>'
+#    return '<h1>The token works!</h1>'
 
 
 @app.route('/logout')
