@@ -18,16 +18,16 @@ mysql=MySQL(app)
 
 
 #CONFIGURACION DE FLASK MAIL
-#app.config['MAIL_SERVER']='smtp.gmail.com'
-#app.config['MAIL_PORT'] = 465
-#app.config['MAIL_USERNAME'] = 'gpanelli3@gmail.com'
-#app.config['MAIL_PASSWORD'] = 'Deporlomejor99'
-#app.config['MAIL_USE_TLS'] = False
-#app.config['MAIL_USE_SSL'] = True
-#mail= Mail(app)
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'gpanelli3@gmail.com'
+app.config['MAIL_PASSWORD'] = 'qsxl bfml iosb beta'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail= Mail(app)
 
 app.secret_key="secret_key"
-#s = URLSafeTimedSerializer('Thisisasecret!')
+s = URLSafeTimedSerializer('Thisisasecret!')
 
 #-----------------------------------------------------
 
@@ -128,15 +128,15 @@ def update():
         nuevaCantidad = request.form.get('cantidad')
 
         
-        try:
-            cursor = mysql.connection.cursor()
-            cursor.execute('UPDATE producto SET precio = %s, cantidad = %s WHERE idProducto = %s',
-                           (nuevoPrecio, nuevaCantidad, idProducto))
-            mysql.connection.commit()
-            cursor.close()
-            print("Actualización correcta")
-        except mysql.connector.Error as error:
-            print("Error MySQL:", error)
+        cursor = mysql.connection.cursor()
+        cursor.execute('UPDATE producto SET precio = %s, cantidad = %s WHERE idProducto = %s',
+                       (nuevoPrecio, nuevaCantidad, idProducto))
+        
+        
+        mysql.connection.commit()
+        cursor.close()
+        print("Actualización correcta")
+
 
     
     cursor = mysql.connection.cursor()
@@ -333,32 +333,31 @@ def crearRegistro():
     contra = request.form.get('contra')
     #hash_password=bcrypt.generate_password_hash(contra).decode('utf8')
 
+    #MAIL--------------------------------------------------------------------------
+    token= s.dumps(email)
+
+    msg=Message ('Confirmar email', sender=app.config['MAIL_USERNAME'], recipients=[email])
+    link= url_for('confirm_email', token=token, _external=True)
+    msg.body='tu link es {}'.format(link)
+    mail.send(msg)
+
+
     cursor=mysql.connection.cursor()
     cursor.execute('INSERT INTO usuario(usuario,contra,id_rol) VALUES(%s,%s,%s)',(email,contra,2))
     mysql.connection.commit()
 
-    cuenta=cursor.fetchone()
-    print(cuenta)
+    return "<h1>Revisa tu mail y confirma tu cuenta</h1>"
 
-    #MAIL--------------------------------------------------------------------------
-#    token= s.dumps(email, salt='email-confirm')
 
-#    msg=Message ('confirm EMAIL', sender='asaas@gmail.com', recipients=[email])
-#    link= url_for('confirm_email', token, _external=True)
-#    msg.body='tu link es {}'.format(link)
-#    mail.send(msg)
-
+@app.route('/confirm_email/<token>')
+def confirm_email(token):
+    try:
+        email = s.loads(token, max_age=3600)
+    except SignatureExpired:
+        return '<h1>El token expiro</h1>'
     return render_template("registro.html", mensaje="Usuario registrado correctamente")
 
-
 #MAIL---------------------------------------------------------------------
-#app.route('/confirm_email/<token>')
-#def confirm_email(token):
-#    try:
-#        email = s.loads(token, salt='email-confirm', max_age=3600)
-#    except SignatureExpired:
-#        return '<h1>The token is expired!</h1>'
-#    return '<h1>The token works!</h1>'
 
 
 @app.route('/logout')
