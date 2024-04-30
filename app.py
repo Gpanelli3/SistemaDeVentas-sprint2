@@ -333,6 +333,11 @@ def crearRegistro():
     contra = request.form.get('contra')
     #hash_password=bcrypt.generate_password_hash(contra).decode('utf8')
 
+    cursor=mysql.connection.cursor()
+    cursor.execute('INSERT INTO usuario(usuario,contra,id_rol) VALUES(%s,%s,%s)',(email,contra,2))
+    mysql.connection.commit()
+
+
     #MAIL--------------------------------------------------------------------------
     token= s.dumps(email)
 
@@ -341,12 +346,9 @@ def crearRegistro():
     msg.body='tu link es {}'.format(link)
     mail.send(msg)
 
-
-    cursor=mysql.connection.cursor()
-    cursor.execute('INSERT INTO usuario(usuario,contra,id_rol) VALUES(%s,%s,%s)',(email,contra,2))
-    mysql.connection.commit()
-
     return "<h1>Revisa tu mail y confirma tu cuenta</h1>"
+
+
 
 
 @app.route('/confirm_email/<token>')
@@ -355,8 +357,7 @@ def confirm_email(token):
         email = s.loads(token, max_age=3600)
     except SignatureExpired:
         return '<h1>El token expiro</h1>'
-    return render_template("registro.html", mensaje="Usuario registrado correctamente")
-
+    return redirect(url_for('login', mensaje="Usuario registrado correctamente"))
 #MAIL---------------------------------------------------------------------
 
 
