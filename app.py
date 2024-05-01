@@ -192,34 +192,35 @@ def ingreso():
         usuario = request.form.get('nombre') 
         contra = request.form.get('contra')
 
-
         cursor=mysql.connection.cursor()
 
         cursor.execute("SELECT * from usuario where usuario = %s AND contra = %s", (usuario,contra))
         account=cursor.fetchone()
+        contador=1
 
         if account:
             session['logueado'] = True
             session['usuario'] = usuario
 
+            ingreso=account[4]
 
             if account[3]==1:
                 return redirect(url_for('homeAdmin'))
-
+            #aca agrego la funcionalidad para saber la cantidad de veces que ingreso un usuario
             elif account[3]==2:
+                ingreso+=1
+                
+                updateQuery=('update usuario set ingresos=%s where usuario =%s and contra=%s')
+                cursor.execute(updateQuery, (ingreso,usuario, contra))
+
+                mysql.connection.commit()
+                cursor.close()
+
                 return redirect(url_for('usuario'))
-        
         else:
             return render_template('login.html', mensaje="USUARIO O CONTRASEÑA INCORRECTA")
-
-
-
-
-        
-        
-
-
-
+                
+            
 
 
 @app.route('/homeAdmin')
@@ -360,6 +361,13 @@ def confirm_email(token):
     return redirect(url_for('login', mensaje="Usuario registrado correctamente"))
 #MAIL---------------------------------------------------------------------
 
+@app.route('/usuAdministrar')
+def usuAdministrar():
+    cursor=mysql.connection.cursor()
+    cursor.execute("SELECT usuario,contra,ingresos from usuario")
+    usuarios=cursor.fetchall()
+
+    return render_template("usuAdministrar.html", usuario=usuarios)
 
 @app.route('/logout')
 def logout():
