@@ -5,6 +5,9 @@ from random import sample
 from flask_mail import Mail, Message
 from werkzeug.security import generate_password_hash
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+from datetime import date
+from datetime import datetime
+
 app=Flask(__name__)
 
 
@@ -181,6 +184,7 @@ def bienvenida():
 
 @app.route('/login')
 def login():
+
     return render_template('login.html')
 
 
@@ -208,15 +212,18 @@ def ingreso():
                 return redirect(url_for('homeAdmin'))
             #aca agrego la funcionalidad para saber la cantidad de veces que ingreso un usuario
             elif account[3]==2:
+                #Fecha actual
+                now = datetime.now()
                 ingreso+=1
                 
-                updateQuery=('update usuario set ingresos=%s where usuario =%s and contra=%s')
-                cursor.execute(updateQuery, (ingreso,usuario, contra))
+                updateQuery=('update usuario set ingresos=%s, fecha=%s where usuario =%s and contra=%s')
+                cursor.execute(updateQuery, (ingreso,now,usuario, contra))
 
                 mysql.connection.commit()
                 cursor.close()
 
                 return redirect(url_for('usuario'))
+         
         else:
             return render_template('login.html', mensaje="USUARIO O CONTRASEÑA INCORRECTA")
                 
@@ -364,7 +371,7 @@ def confirm_email(token):
 @app.route('/usuAdministrar')
 def usuAdministrar():
     cursor=mysql.connection.cursor()
-    cursor.execute("SELECT usuario,contra,ingresos from usuario")
+    cursor.execute("SELECT usuario,contra,ingresos,fecha from usuario")
     usuarios=cursor.fetchall()
 
     return render_template("usuAdministrar.html", usuario=usuarios)
