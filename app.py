@@ -200,13 +200,13 @@ def ingreso():
 
         cursor.execute("SELECT * from usuario where usuario = %s AND contra = %s", (usuario,contra))
         account=cursor.fetchone()
-        contador=1
 
         if account:
             session['logueado'] = True
             session['usuario'] = usuario
 
             ingreso=account[4]
+            print("holaaaa",ingreso)
 
             if account[3]==1:
                 return redirect(url_for('homeAdmin'))
@@ -339,34 +339,22 @@ def crearRegistro():
 
     email = request.form.get('email') 
     contra = request.form.get('contra')
-    #hash_password=bcrypt.generate_password_hash(contra).decode('utf8')
 
-    cursor=mysql.connection.cursor()
-    cursor.execute('INSERT INTO usuario(usuario,contra,id_rol) VALUES(%s,%s,%s)',(email,contra,2))
-    mysql.connection.commit()
+    cursor = mysql.connection.cursor()
+    cursor.execute('SELECT usuario FROM usuario')
+    resultados = cursor.fetchall()
 
+    for resultado in resultados: 
+        if resultado[0] == email:
+            return render_template('registro.html', mensaje='Este usuario ya se encuentra registrado')
 
-    #MAIL--------------------------------------------------------------------------
-    token= s.dumps(email)
-
-    msg=Message ('Confirmar email', sender=app.config['MAIL_USERNAME'], recipients=[email])
-    link= url_for('confirm_email', token=token, _external=True)
-    msg.body='tu link es {}'.format(link)
-    mail.send(msg)
-
-    return "<h1>Revisa tu mail y confirma tu cuenta</h1>"
+        else:
+            cursor.execute('INSERT INTO usuario(usuario,contra,id_rol) VALUES(%s,%s,%s)',(email,contra,2))
+            mysql.connection.commit()
+            return render_template("login.html")
 
 
 
-
-@app.route('/confirm_email/<token>')
-def confirm_email(token):
-    try:
-        email = s.loads(token, max_age=3600)
-    except SignatureExpired:
-        return '<h1>El token expiro</h1>'
-    return redirect(url_for('login', mensaje="Usuario registrado correctamente"))
-#MAIL---------------------------------------------------------------------
 
 @app.route('/usuAdministrar')
 def usuAdministrar():
