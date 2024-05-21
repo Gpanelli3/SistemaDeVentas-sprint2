@@ -126,14 +126,17 @@ def ingresarProd():
 @app.route('/update', methods=['GET', 'POST'])
 def update():
     if request.method == 'POST':
-        idProducto = request.form.get('idProducto') 
+        nombre = request.form.get('idProducto') 
         nuevoPrecio = request.form.get('precio')
         nuevaCantidad = request.form.get('cantidad')
 
+        nombreMax=""
+        nombreMax=nombre.upper()
+
         
         cursor = mysql.connection.cursor()
-        cursor.execute('UPDATE producto SET precio = %s, cantidad = %s WHERE idProducto = %s',
-                       (nuevoPrecio, nuevaCantidad, idProducto))
+        cursor.execute('UPDATE producto SET precio = %s, cantidad = %s WHERE nombre = %s',
+                       (nuevoPrecio, nuevaCantidad, nombreMax))
         
         
         mysql.connection.commit()
@@ -148,6 +151,22 @@ def update():
     cursor.close()
 
     return render_template("update.html", title="Pagina Principal", user="PRODUCTOS INGRESADOS CORRECTAMENTE", productos=productos)
+
+@app.route("/eliminar")
+def eliminar():
+    nombre = request.form.get('nombre')
+
+    #nombreMax=""
+    #nombreMax=nombre.upper()
+
+    cursor = mysql.connection.cursor()
+    cursor.execute("delete from producto where nombre = %s", (nombre,))
+
+    mysql.connection.commit()
+    cursor.close()
+    print("Actualización correcta")
+
+    return render_template("eliminar.html")
 
 
 
