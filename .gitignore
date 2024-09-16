@@ -1,0 +1,18 @@
+# Archivos compilados de Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Entorno virtual
+env/
+
+# Archivos de paquetes
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Archivos de tests de cobertura
+.coverage
+.tox/
