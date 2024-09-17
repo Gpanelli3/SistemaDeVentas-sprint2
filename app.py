@@ -155,22 +155,25 @@ def eliminar():
 
 
 
-@app.route("/delete")
-def delete(request,response):
+@app.route("/delete", methods=['GET', 'POST'])
+def delete():
     connection=get_db_connection()
     nombre = request.form.get('nombre')
 
-    #nombreMax=""
-    #nombreMax=nombre.upper()
+    nombreMax=""
+    nombreMax=nombre.upper()
+    
+    try:
+        cursor = connection.cursor()
+        cursor.execute("delete from producto where nombre = %s", (nombreMax,))
+        connection.commit()
+        print("Actualización correcta")
+    except Exception as error:
+        print("error: {error}")
+    finally:
+        cursor.close()
 
-    cursor = connection.cursor()
-    cursor.execute("delete from producto where nombre = %s", (nombre,))
-
-    connection.commit()
-    cursor.close()
-    print("Actualización correcta")
-
-    return redirect(url_for('/eliminar'))
+    return render_template("eliminar.html")
 
 
 
