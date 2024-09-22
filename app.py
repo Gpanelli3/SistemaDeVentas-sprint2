@@ -7,24 +7,10 @@ from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from datetime import date
 from datetime import datetime
 
+
+from conexion import get_db_connection
 app=Flask(__name__)
 
-
-#CONFIGURACION DE LA BASE DE DATOS
-db_config = {
-    'host': 'localhost',
-    'user': 'genarodesarrollo',
-    'password': 'password',
-    'database': 'sistema-ventas'
-}
-def get_db_connection():
-    connection = mysql.connector.connect(**db_config)
-    return connection
-
-#-----------------------------------------------------
-
-app.secret_key="secret_key"
-s = URLSafeTimedSerializer('Thisisasecret!')
 
 #-----------------------------------------------------
 
@@ -82,9 +68,6 @@ def inicio():
 
     return render_template("inicio.html", producto=productos, pagination=pagination,categorias=categorias, mensaje="INICIO")
     
-
-
-
 
 
 @app.route('/agregarProd')
