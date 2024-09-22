@@ -39,7 +39,7 @@ def inicio():
     row = cursor.fetchone()
     if row:
         count = row[0]  # Acceder al primer elemento de la tupla
-        print("Total:", count)
+        # print("Total:", count)
     else:
         print("No se encontraron filas.")
 
@@ -52,7 +52,6 @@ def inicio():
     #start_index: Este es el índice del primer elemento que se mostrará en la página actual.
     
     start_index=(page_num-1) * per_page +1 
-    print(start_index)
 
     #consulta para traer los productos y plasmarlos en cada pagina
     productos=[]
@@ -236,14 +235,13 @@ def ingreso():
 
             if account[3]==1:
                 return redirect(url_for('homeAdmin'))
-            #aca agrego la funcionalidad para saber la cantidad de veces que ingreso un usuario
+
             elif account[3]==2:
-                #Fecha actual
                 now = datetime.now()
                 ingreso+=1
                 
                 updateQuery=('update usuario set ingresos=%s, fecha=%s where usuario =%s and contra=%s')
-                cursor.execute(updateQuery, (ingreso,now,usuario, contra))
+                cursor.execute(updateQuery, (ingresos,now,usuario, contra))
 
                 connection.commit()
                 cursor.close()
@@ -397,7 +395,7 @@ def usuAdministrar():
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('login'))
+    return redirect(url_for('inicio'))
     
 
 if __name__ == '__main__':
