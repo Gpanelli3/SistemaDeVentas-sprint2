@@ -59,7 +59,7 @@ def inicio():
     #paginacion es una funcion de Pagination de Flask donde se juntan todos los datos y se establece los links
     
     pagination=Pagination(page=page_num, total=count, per_page=per_page,
-                          display_msg=f"mostrando registros {start_index}- {end_index} de un total de {count}")
+                          display_msg=f"mostrando registros {start_index}- {end_index}")
     
     connection.commit()
     categorias=listabebidas()
@@ -214,7 +214,7 @@ def ingreso():
 
         if account:
             ingreso=account[4]
-            print("holaaaa",ingreso)
+            print(account)
 
             if account[3]==1:
                 return redirect(url_for('homeAdmin'))
@@ -224,7 +224,7 @@ def ingreso():
                 ingreso+=1
                 
                 updateQuery=('update usuario set ingresos=%s, fecha=%s where usuario =%s and contra=%s')
-                cursor.execute(updateQuery, (ingresos,now,usuario, contra))
+                cursor.execute(updateQuery, (ingreso,now,usuario, contra))
 
                 connection.commit()
                 cursor.close()
@@ -359,7 +359,7 @@ def crearRegistro():
             return render_template('registro.html', mensaje='Este usuario ya se encuentra registrado')
 
         else:
-            cursor.execute('INSERT INTO usuario(usuario,contra,id_rol) VALUES(%s,%s,%s)',(email,contra,2))
+            cursor.execute('INSERT INTO usuario(usuario,contra,id_rol,ingresos) VALUES(%s,%s,%s,%s)',(email,contra,2,1))
             connection.commit()
             return render_template("login.html")
 
@@ -377,7 +377,6 @@ def usuAdministrar():
 
 @app.route('/logout')
 def logout():
-    session.clear()
     return redirect(url_for('inicio'))
     
 
