@@ -119,6 +119,11 @@ def update():
             return "El precio debe ser un número positivo", 400
         if not nuevaCantidad or not nuevaCantidad.isdigit() or int(nuevaCantidad) < 0:
             return "La cantidad debe ser un número entero no negativo", 400
+        
+        # productos=connection.cursor()
+        # productos.execute("select nombre from producto")
+        # cursor.fetchall()
+        # print(productos)
 
         nombreMax=""
         nombreMax=nombre.upper()
