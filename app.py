@@ -97,7 +97,7 @@ def ingresarProd():
         cursor.close()
 
         
-    return redirect(url_for('inicio'))
+    return redirect(url_for('homeAdmin'))
 
 
 
@@ -142,6 +142,7 @@ def delete():
     connection=get_db_connection()
     nombre = request.form.get('nombre')
 
+
     nombreMax=""
     nombreMax=nombre.upper()
     
@@ -155,7 +156,7 @@ def delete():
     finally:
         cursor.close()
 
-    return render_template("eliminar.html")
+    return redirect(url_for('homeAdmin'))
 
 
 
@@ -217,6 +218,7 @@ def ingreso():
             print(account)
 
             if account[3]==1:
+                print("ingreso correcto ADMINISTRADOR")
                 return redirect(url_for('homeAdmin'))
 
             elif account[3]==2:
@@ -228,11 +230,12 @@ def ingreso():
 
                 connection.commit()
                 cursor.close()
-
+                print("ingreso correcto USUARIO")
                 return redirect(url_for('usuario'))
          
         else:
-            return render_template('login.html', mensaje="USUARIO O CONTRASEÑA INCORRECTA")
+            print("USUARIO INCORRECTO")
+            return render_template('login.html')
                 
             
 
@@ -377,6 +380,7 @@ def usuAdministrar():
 
 @app.route('/logout')
 def logout():
+    print("CIERRE DE SESION EXITOSO")
     return redirect(url_for('inicio'))
     
 

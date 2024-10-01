@@ -8,47 +8,30 @@
     <title>Document</title>
 </head>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-        <div >
-            <a><img src="https://na.leafletscdns.com/com.ar/data/6/logo.png?0674196497436a8d06d82c0b388fafb6" alt="Logo" width="40" height="28" class="p"></a>
-        </div>
-            
-
-        <a class="navbar-brand" href="./">SUPERMERCADO DIA</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-              <a class="nav-link active" aria-current="page" href="./homeAdmin">Home</a>
-              <a class="nav-link" href="./agregarProd">Ingresar Productos</a>
-                <a class="nav-link" href="./update">Actualizar Productos</a>
-                <a class="nav-link" href="./usuAdministrar">Lista de Usuarios</a>
-                <a class="nav-link" href="./logout">Cerrar sesion</a>
-              
-            </div class="DEBAJO NAV RAMA">
-
-
-
+  <div class="container-fluid">
+    <div >
+        <a><img src="https://na.leafletscdns.com/com.ar/data/6/logo.png?0674196497436a8d06d82c0b388fafb6" alt="Logo" width="40" height="28" class="p"></a>
+    </div>
         
-        <div class="container mt-4">
-          <div class="categorias-wrapper">
-              <div class="categorias-lista">
-                  <form method='POST' action="/categ">
-                      <div class="col-2" style="font-family: Arial, Helvetica, sans-serif;">
-                          <select class="form-select" name="pc" id="pc" style="margin-left: 20%; border-color: black; border-radius: 150px; " required>
-                              <option value="" selected disabled style="background-color: rgb(157, 217, 245);" >CATEGORIAS</option>
-                              {% for x in categorias %}
-                              <option value="{{x[0]}}">{{x[1] }}</option>
-                              {% endfor %}
-                          </select>
-                      </div>
-                  
-                      </div>
-              
-                          <button type="submit" class="btn btn-primary" style="margin-left: 20%; margin-top: -65px; font-size: 13px;" >Seleccionar</button>
-              
-                      </div>
+
+    <a class="navbar-brand" href="./">SUPERMERCADO DIA</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link active" aria-current="page" href="./homeAdmin">Home</a>
+          <a class="nav-link" href="./agregarProd">Ingresar Productos</a>
+            <a class="nav-link" href="./update">Actualizar Productos</a>
+            <a class="nav-link" href="./usuAdministrar">Lista de Usuarios</a>
+            <a class="nav-link" href="./eliminar">eliminar productos</a>
+            <a class="nav-link" href="./logout">Cerrar sesion</a>
+          
+        </div class="DEBAJO NAV RAMA">
+
+
+
+    
                   </form>
                 </div>
               </nav>
