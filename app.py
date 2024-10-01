@@ -86,12 +86,18 @@ def ingresarProd():
         cantidad=request.form['cantidad']
         cat=request.form['categoria']
 
+        if not precio or not precio.isdigit() or float(precio) <= 0:
+            return "El precio debe ser un número positivo", 400
+        if not cantidad or not cantidad.isdigit() or int(cantidad) < 0:
+            return "La cantidad debe ser un número entero no negativo", 400
+
         nombreMax=""
         nombreMax=name.upper()
 
         cursor=connection.cursor()
         cursor.execute('INSERT INTO producto(nombre,descripcion,precio,cantidad,id_cat_corresp) VALUES(%s,%s,%s,%s,%s)',
                        (nombreMax,descr,precio,cantidad,cat))
+
         connection.commit()
 
         cursor.close()
@@ -108,6 +114,11 @@ def update():
         nombre = request.form.get('idProducto') 
         nuevoPrecio = request.form.get('precio')
         nuevaCantidad = request.form.get('cantidad')
+
+        if not nuevoPrecio or not nuevoPrecio.isdigit() or float(nuevoPrecio) <= 0:
+            return "El precio debe ser un número positivo", 400
+        if not nuevaCantidad or not nuevaCantidad.isdigit() or int(nuevaCantidad) < 0:
+            return "La cantidad debe ser un número entero no negativo", 400
 
         nombreMax=""
         nombreMax=nombre.upper()
@@ -145,18 +156,23 @@ def delete():
 
     nombreMax=""
     nombreMax=nombre.upper()
+
+
+    cursor = connection.cursor()
+    cursor.execute("delete from producto where nombre = %s", (nombreMax,))
+    connection.commit()
+    print(f"Productos eliminados: {cursor.rowcount}")
     
-    try:
-        cursor = connection.cursor()
-        cursor.execute("delete from producto where nombre = %s", (nombreMax,))
-        connection.commit()
-        print("Actualización correcta")
-    except Exception as error:
-        print("error: {error}")
-    finally:
-        cursor.close()
+    if cursor.rowcount==0:
+        print("NO EXISTE TAL PRODUCTO O LO ESCRIBIO MAL")
+
+    cursor.close()
 
     return redirect(url_for('homeAdmin'))
+
+
+
+
 
 
 
