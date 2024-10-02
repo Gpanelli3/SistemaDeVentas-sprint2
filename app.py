@@ -86,19 +86,29 @@ def ingresarProd():
         cantidad=request.form['cantidad']
         cat=request.form['categoria']
 
+        nombreMax=""
+        nombreMax=name.upper()
+
         if not precio or not precio.isdigit() or float(precio) <= 0:
             return "El precio debe ser un número positivo", 400
         if not cantidad or not cantidad.isdigit() or int(cantidad) < 0:
             return "La cantidad debe ser un número entero no negativo", 400
 
-        nombreMax=""
-        nombreMax=name.upper()
+        productos=connection.cursor()
+        productos.execute("SELECT nombre FROM producto")
+        consulta=productos.fetchall()
+
+        for producto in consulta:
+            if nombreMax == producto[0]:
+                return "El producto ya existe"
+        
 
         cursor=connection.cursor()
         cursor.execute('INSERT INTO producto(nombre,descripcion,precio,cantidad,id_cat_corresp) VALUES(%s,%s,%s,%s,%s)',
                        (nombreMax,descr,precio,cantidad,cat))
 
         connection.commit()
+        print("INGRESO CORRECTO")
 
         cursor.close()
 
@@ -114,19 +124,26 @@ def update():
         nombre = request.form.get('idProducto') 
         nuevoPrecio = request.form.get('precio')
         nuevaCantidad = request.form.get('cantidad')
+        nombreMax=""
+        nombreMax=nombre.upper()
 
         if not nuevoPrecio or not nuevoPrecio.isdigit() or float(nuevoPrecio) <= 0:
             return "El precio debe ser un número positivo", 400
         if not nuevaCantidad or not nuevaCantidad.isdigit() or int(nuevaCantidad) < 0:
             return "La cantidad debe ser un número entero no negativo", 400
         
-        # productos=connection.cursor()
-        # productos.execute("select nombre from producto")
-        # cursor.fetchall()
-        # print(productos)
+        productos=connection.cursor()
+        productos.execute("SELECT nombre FROM producto")
+        consulta=productos.fetchall()
 
-        nombreMax=""
-        nombreMax=nombre.upper()
+        for producto in consulta:
+            producto_existe=False
+            if nombreMax == producto[0]:
+                producto_existe=True
+                break
+        
+        if not producto_existe:
+            return "el producto que queres modificar no existe",400
 
         
         cursor = connection.cursor()
@@ -135,8 +152,8 @@ def update():
         
         
         connection.commit()
+        print("ACTUALIZACION CORRECTA")
         cursor.close()
-        print("Actualización correcta")
 
 
     
@@ -145,7 +162,7 @@ def update():
     productos = cursor.fetchall()
     cursor.close()
 
-    return render_template("update.html", title="Pagina Principal", user="PRODUCTOS INGRESADOS CORRECTAMENTE", productos=productos)
+    return render_template("update.html", title="Pagina Principal", productos=productos)
 
 @app.route("/eliminar")
 def eliminar():
@@ -256,7 +273,7 @@ def ingreso():
          
         else:
             print("USUARIO INCORRECTO")
-            return render_template('login.html')
+            return render_template('login.html', mensaje="Usuario o contraseña incorrectos")
                 
             
 
@@ -271,7 +288,6 @@ def homeAdmin():
     row = cursor.fetchone()
     if row:
         count = row[0]  # Acceder al primer elemento de la tupla
-        print("Total:", count)
     else:
         print("No se encontraron filas.")
 
@@ -284,7 +300,6 @@ def homeAdmin():
     #start_index: Este es el índice del primer elemento que se mostrará en la página actual.
     
     start_index=(page_num-1) * per_page +1 
-    print(start_index)
 
     productos=[]
     sql=(f'SELECT producto.idProducto, producto.nombre, producto.descripcion, categorias.nombre, producto.cantidad, producto.precio FROM producto INNER JOIN categorias ON categorias.idcategorias = id_cat_corresp ORDER BY idProducto DESC LIMIT {per_page} OFFSET {start_index -1}')
@@ -321,7 +336,6 @@ def usuario():
     row = cursor.fetchone()
     if row:
         count = row[0]  # Acceder al primer elemento de la tupla
-        print("Total:", count)
     else:
         print("No se encontraron filas.")
 
@@ -334,7 +348,6 @@ def usuario():
     #start_index: Este es el índice del primer elemento que se mostrará en la página actual.
     
     start_index=(page_num-1) * per_page +1 
-    print(start_index)
 
     productos=[]
     sql=(f'SELECT producto.idProducto, producto.nombre, producto.descripcion, categorias.nombre, producto.cantidad, producto.precio FROM producto INNER JOIN categorias ON categorias.idcategorias = id_cat_corresp ORDER BY idProducto DESC LIMIT {per_page} OFFSET {start_index -1}')
@@ -385,6 +398,7 @@ def crearRegistro():
         else:
             cursor.execute('INSERT INTO usuario(usuario,contra,id_rol,ingresos) VALUES(%s,%s,%s,%s)',(email,contra,2,1))
             connection.commit()
+            print("USUARIO CORRECTAMENTE CREADO")
             return render_template("login.html")
 
 
